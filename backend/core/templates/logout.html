@@ -1,0 +1,95 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logout - SafeSpace</title>
+    <link rel="stylesheet" href="{% static 'css/logout.css' %}">
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #ffe6f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .logout-card {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 350px;
+        }
+
+        h2 {
+            color: #3a1616;
+            margin-bottom: 20px;
+        }
+
+        .logout-text {
+            color: #555;
+            margin-bottom: 30px;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+
+        .logout-btn {
+            background: #ff3385;
+            color: white;
+        }
+
+        .logout-btn:hover {
+            background: #ff66b2;
+        }
+
+        .cancel-btn {
+            background: #eee;
+            color: #333;
+            text-decoration: none;
+        }
+
+        .cancel-btn:hover {
+            background: #ddd;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="logout-card">
+        <h2>Logout</h2>
+        <p class="logout-text">
+            Are you sure you want to logout from your account?
+        </p>
+
+        <form method="POST">
+            {% csrf_token %}
+            <div class="btn-group">
+                <button type="submit" class="btn logout-btn">Logout</button>
+                <a href="{% url 'dashboard' %}" class="btn cancel-btn">Cancel</a>
+            </div>
+        </form>
+    </div>
+
+</body>
+
+</html>

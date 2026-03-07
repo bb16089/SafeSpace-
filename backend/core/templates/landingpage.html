@@ -1,0 +1,708 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Premium Pink Homepage</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Arial', sans-serif;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      background: #ffe6f0;
+    }
+
+    main {
+      flex: 1;
+    }
+
+
+    nav {
+      width: 100%;
+      background: rgb(255, 255, 255);
+      backdrop-filter: blur(10px);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 50px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+      border-radius: 0 0 20px 20px;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .logo img {
+      height: 90px;
+      transform: perspective(500px);
+      transition: transform 0.3s;
+      cursor: pointer;
+    }
+
+    .logo img:hover {
+      transform: perspective(500px) rotateY(0deg) scale(1.05);
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 25px;
+      align-items: center;
+    }
+
+    nav ul li {
+      position: relative;
+    }
+
+    nav ul li a {
+      text-decoration: none;
+      color: rgb(0, 0, 0);
+      font-weight: 120;
+      padding: 8px 12px;
+      transition: all 0.3s ease;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    nav ul li a:hover {
+      background: #d580a29c;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    }
+
+
+    nav ul li ul {
+      display: none;
+      position: absolute;
+      top: 45px;
+      left: 0;
+      background: rgba(255, 102, 178, 0.95);
+      border-radius: 12px;
+      min-width: 160px;
+      overflow: hidden;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+      transform: translateY(-10px);
+      opacity: 0;
+      transition: all 0.3s ease;
+    }
+
+    nav ul li ul li a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px;
+      color: white;
+    }
+
+    nav ul li ul li a:hover {
+      background: #ff3385;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+
+    .cta {
+      background: #ff3385;
+      padding: 10px 20px;
+      color: white;
+      font-weight: bold;
+      border-radius: 10px;
+      text-decoration: none;
+      transition: all 0.3s;
+    }
+
+    .cta:hover {
+      background: #ff66b2;
+      transform: scale(1.05);
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+    }
+
+
+    .hero {
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      color: white;
+      text-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+      background: url("{% static 'images/pexels-rdne-8760662.jpg' %}") no-repeat center center/cover;
+    }
+
+    .hero h1 {
+      font-size: 3rem;
+      margin-bottom: 20px;
+    }
+
+    .hero p {
+      font-size: 1.3rem;
+      margin-bottom: 30px;
+    }
+
+
+    .about-us-section {
+      height: 100vh;
+      position: relative;
+      padding: 150px 20px 150px;
+      background: url("{% static 'images/image copy 5.png' %}") no-repeat center center/cover;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+
+    .glass-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(12px);
+      border-radius: 25px;
+      padding: 50px;
+      max-width: 1200px;
+      width: 100%;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      position: relative;
+    }
+
+    .left-side {
+      flex: 1;
+      position: relative;
+      color: #fff;
+      padding-right: 20px;
+    }
+
+    .left-side .floating-icon {
+      font-size: 120px;
+      position: absolute;
+      top: -170px;
+      left: -30px;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-15px);
+      }
+    }
+
+    .left-side p {
+      font-size: 1.2rem;
+      line-height: 1.8;
+      margin-top: 50px;
+    }
+
+    .right-side {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .polaroid-stack {
+      position: relative;
+      width: 260px;
+      height: 260px;
+    }
+
+    .polaroid {
+      position: absolute;
+      background: white;
+      padding: 10px 10px 25px;
+      border-radius: 10px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+      cursor: pointer;
+    }
+
+    .polaroid img {
+      width: 200px;
+      border-radius: 8px;
+      display: block;
+    }
+
+
+    .card-1 {
+      top: 30px;
+      left: 0;
+      transform: rotate(-10deg);
+      z-index: 1;
+    }
+
+    .card-2 {
+      top: 10px;
+      left: 30px;
+      transform: rotate(-2deg);
+      z-index: 2;
+    }
+
+    .card-3 {
+      top: 0;
+      left: 60px;
+      transform: rotate(6deg);
+      z-index: 3;
+    }
+
+
+    .polaroid-stack:hover .card-1 {
+      transform: translate(-20px, 10px) rotate(-14deg);
+    }
+
+    .polaroid-stack:hover .card-2 {
+      transform: translate(0, -10px) rotate(0deg);
+    }
+
+    .polaroid-stack:hover .card-3 {
+      transform: translate(20px, -20px) rotate(10deg);
+    }
+
+
+    .polaroid:hover {
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.45);
+      transform: scale(1.05);
+    }
+
+
+
+    .offer-gallery-section {
+      padding: 100px 20px;
+      background: linear-gradient(rgba(236, 160, 206, 0.7), rgba(255, 230, 245, 0.7)),
+      url("{% static 'offer-gallery-bg.jpg' %}") center / cover no-repeat;
+    }
+
+    .section-title {
+      text-align: center;
+      font-family: cursive;
+      font-size: 7rem;
+      color: #311f1f;
+      margin-bottom: 40px;
+      margin-top: 20px;
+    }
+
+    .offer-gallery {
+      max-width: 1200px;
+      margin: auto;
+      display: grid;
+      grid-template-rows: repeat(2, auto);
+      grid-template-columns: repeat(3, 1fr);
+      gap: 30px;
+      margin-top: -50px;
+    }
+
+
+    .offer-item {
+      background: rgba(255, 255, 255, 0.35);
+      backdrop-filter: blur(16px);
+      border-radius: 206px;
+      padding: 40px 30px;
+      text-align: center;
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.18);
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+    }
+
+    .offer-item:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 30px 60px rgba(255, 79, 163, 0.35);
+    }
+
+
+    .offer-item .icon {
+      font-size: 3.2rem;
+      margin-bottom: 20px;
+      animation: floatIcon 4s ease-in-out infinite;
+    }
+
+
+    @keyframes floatIcon {
+      0% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-10px);
+      }
+
+      100% {
+        transform: translateY(0);
+      }
+    }
+
+
+    .offer-item h3 {
+      font-size: 1.4rem;
+      color: #ff4fa3;
+      margin-bottom: 12px;
+    }
+
+    .offer-item p {
+      font-size: 0.95rem;
+      color: #333;
+      line-height: 1.6;
+    }
+
+
+
+    .category-section {
+      padding: 100px 20px;
+      background: #f4cfea9f;
+    }
+
+    .category-grid {
+      max-width: 900px;
+      margin: auto;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 40px;
+    }
+
+    .category-card {
+      background: linear-gradient(135deg, #ff4fa4cb, #ff9acb);
+      color: #fff;
+      padding: 50px 30px;
+      border-radius: 26px;
+      text-align: center;
+      box-shadow: 0 20px 50px rgba(255, 79, 163, 0.4);
+      transition: transform 0.3s ease;
+    }
+
+    .category-card:hover {
+      transform: translateY(-8px);
+    }
+
+    .category-card .icon {
+      font-size: 3rem;
+      display: block;
+      margin-bottom: 20px;
+    }
+
+    .category-card h3 {
+      font-size: 1.6rem;
+      margin-bottom: 10px;
+    }
+
+    .category-card p {
+      font-size: 1rem;
+      line-height: 1.6;
+    }
+
+
+    @media (max-width: 768px) {
+
+      .section-title {
+        font-size: 2rem;
+      }
+
+      .offer-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .offer-card {
+        grid-column: auto !important;
+      }
+
+      .category-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+
+    footer {
+      width: 100%;
+      background: rgba(255, 102, 178, 0.9);
+      color: white;
+      text-align: center;
+      padding: 20px 0;
+      box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.2);
+      flex-shrink: 0;
+    }
+
+    footer a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      margin: 0 10px;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+
+    @media (max-width: 1024px) {
+      .glass-container {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 30px;
+      }
+
+      .left-side {
+        padding-right: 0;
+        margin-bottom: 30px;
+      }
+
+      .right-side {
+        flex-direction: row;
+        justify-content: flex-start;
+        gap: 15px;
+      }
+
+      .polaroid img {
+        width: 150px;
+      }
+
+      .left-side .floating-icon {
+        top: -20px;
+        left: -20px;
+        font-size: 40px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .section-title {
+        font-size: 2.5rem;
+      }
+
+      .pink-box {
+        padding: 15px 25px;
+        font-size: 1rem;
+      }
+
+      .hero h1 {
+        font-size: 2rem;
+      }
+
+      .hero p {
+        font-size: 1rem;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .about-glass {
+        grid-template-columns: 1fr;
+        gap: 80px;
+      }
+
+      .polaroid-stack {
+        margin: auto;
+      }
+
+      .offers-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <nav>
+    <div class="logo">
+      <img src="{% static 'images/safespacelogo' %}" alt="Logo">
+    </div>
+    <ul>
+      <li><a href="#about">About</a></li>
+      <li><a href="#offer">What We Offer</a></li>
+      <li>
+        <a href="#categories">Categories ▼</a>
+        <ul>
+          <li><a href="#academic"><i class="fas fa-book"></i> Academic</a></li>
+          <li><a href="#emotional"><i class="fas fa-heart"></i> Emotional</a></li>
+        </ul>
+      </li>
+      <li>
+        <a href="{% url 'login'%}">Profiles ▼</a>
+        <ul>
+          <li><a href="{% url 'login' %}"><i class="fas fa-user"></i> Users</a></li>
+      
+        </ul>
+      </li>
+    
+      <form action="{% url 'logout' %}" method="post" style="display: inline;">
+        {% csrf_token %}
+        <button type="submit"
+          style="background:none; border:none; color:black; font-weight:120; cursor:pointer; padding:8px 12px;">Logout</button>
+      </form>
+      <a href="{% url 'signup' %}">Get Started</a>
+      <a href="{% url 'login' %}">Login</a>
+    </ul>
+  </nav>
+
+  <a href="{% url 'signup' %}" class="btn btn-primary">Get Started</a>
+
+  </ul>
+  </nav>
+
+  <main>
+
+    <section class="hero">
+      <div>
+        <h1>Welcome to Our SafeSpace Platform</h1>
+        <p>Explore resources, programs, connect with people, and discover opportunities!</p>
+        <a href="{% url 'signup' %}" class="cta">Join Now</a>
+      </div>
+    </section>
+
+
+    <section class="about-us-section" id="about">
+      <h2 class="section-title">About Us</h2>
+      <div class="glass-container">
+        <div class="left-side">
+          <div class="floating-icon">🎀🌸</div>
+          <p>
+            Welcome to our platform! We provide high-quality resources, mentorship,
+            and programs that support both academic and emotional growth. Our goal
+            is to create an engaging, supportive, and creative environment for all users.
+          </p>
+        </div>
+        <div class="polaroid-stack">
+          <div class="polaroid card-1">
+            <img src="{% static 'images/pexels-bozveysel-35130806.jpg' %}" alt="Memory 1">
+          </div>
+          <div class="polaroid card-2">
+            <img src="{% static 'images/pexels-rdne-8760662.jpg' %}" alt="Memory 2">
+          </div>
+          <div class="polaroid card-3">
+            <img src="{% static 'images/pexels-quincy-anderson-1677890-3204296.jpg' %}" alt="Memory 3">
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+
+  <section class="offer-gallery-section" id="offer">
+    <h2 class="section-title">What We Offer</h2>
+
+    <div class="offer-gallery">
+
+      <div class="offer-item">
+        <div class="icon">🎓</div>
+        <h3>Academic Excellence</h3>
+        <p>Personalized academic support designed to help learners thrive.</p>
+      </div>
+
+      <div class="offer-item">
+        <div class="icon">💗</div>
+        <h3>Emotional Wellbeing</h3>
+        <p>Safe emotional guidance for confidence, clarity, and growth.</p>
+      </div>
+
+      <div class="offer-item">
+        <div class="icon">🧠</div>
+        <h3>Skill Development</h3>
+        <p>Modern skills aligned with real-world and future careers.</p>
+      </div>
+
+      <div class="offer-item">
+        <div class="icon">🤝</div>
+        <h3>Expert Mentorship</h3>
+        <p>Learn directly from certified mentors and industry experts.</p>
+      </div>
+
+      <div class="offer-item">
+        <div class="icon">🌍</div>
+        <h3>Community Growth</h3>
+        <p>A supportive ecosystem for collaboration and inspiration.</p>
+      </div>
+
+      <div class="offer-item">
+        <div class="icon">⛳️</div>
+        <h3>secrect chat</h3>
+        <p>A supportive ecosystem for collaboration and inspiration.</p>
+      </div>
+
+    </div>
+  </section>
+
+
+  <section class="category-section" id="categories">
+    <h2 class="section-title">Categories</h2>
+
+    <div class="category-grid">
+      <div class="category-card" id="academic">
+        <span class="icon">🎓</span>
+        <h3>Academic</h3>
+        <p>Structured learning, exam prep, and academic mentoring.</p>
+      </div>
+
+      <div class="category-card" id="emotional">
+        <span class="icon">💗</span>
+        <h3>Emotional</h3>
+        <p>Mental wellness, emotional intelligence, and self-growth.</p>
+      </div>
+    </div>
+  </section>
+
+
+
+  <footer>
+    <p>&copy; 2025 Premium Pink Platform. All rights reserved.</p>
+    <p>
+      <a href="#about">About</a> |
+      <a href="#offers">What We Offer</a> |
+      <a href="#signup">Sign Up</a>
+    </p>
+  </footer>
+
+
+  <script>
+    const dropdowns = document.querySelectorAll('nav ul li');
+    dropdowns.forEach(drop => {
+      const trigger = drop.querySelector('a');
+      const menu = drop.querySelector('ul');
+      if (menu) {
+        trigger.addEventListener('click', (e) => {
+          e.preventDefault();
+          dropdowns.forEach(d => {
+            const m = d.querySelector('ul');
+            if (m && m !== menu) {
+              m.style.display = 'none';
+              m.style.opacity = 0;
+              m.style.transform = 'translateY(-10px)';
+            }
+          });
+          if (menu.style.display === 'block') {
+            menu.style.display = 'none';
+            menu.style.opacity = 0;
+            menu.style.transform = 'translateY(-10px)';
+          } else {
+            menu.style.display = 'block';
+            menu.style.opacity = 1;
+            menu.style.transform = 'translateY(0)';
+          }
+        });
+      }
+    });
+    document.addEventListener('click', (e) => {
+      dropdowns.forEach(drop => {
+        const menu = drop.querySelector('ul');
+        if (menu && !drop.contains(e.target)) {
+          menu.style.display = 'none';
+          menu.style.opacity = 0;
+          menu.style.transform = 'translateY(-10px)';
+        }
+      });
+    });
+
+
+  </script>
+</body>
+
+</html>

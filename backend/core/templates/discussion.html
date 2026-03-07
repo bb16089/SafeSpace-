@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>SafeSpace – Discussion Hub</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #e05a7a;
+      --primary-light: #f3b6c8;
+      --primary-dark: #b83d5a;
+      --bg-color: #ffeef2;
+      --glass-bg: rgba(255, 255, 255, 0.7);
+      --glass-border: rgba(255, 255, 255, 0.4);
+      --text-main: #333;
+      --text-sub: #666;
+      --shadow: 0 8px 32px 0 rgba(224, 90, 122, 0.15);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, var(--bg-color) 0%, #fff0f5 100%);
+      background-attachment: fixed;
+      color: var(--text-main);
+      min-height: 100vh;
+    }
+
+    /* ===== NAVBAR ===== */
+    .navbar {
+      background: var(--glass-bg);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--glass-border);
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .logo a img {
+      height: 50px;
+      width: auto;
+      object-fit: contain;
+      transition: transform 0.3s ease;
+    }
+
+    .logo a img:hover {
+      transform: scale(1.05);
+    }
+
+    .nav-icons {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .nav-icons a,
+    .logout-btn {
+      color: var(--text-sub);
+      text-decoration: none;
+      font-size: 1.2rem;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+    }
+
+    .nav-icons a:hover,
+    .logout-btn:hover {
+      color: var(--primary);
+      background: rgba(224, 90, 122, 0.1);
+      transform: translateY(-2px);
+    }
+
+    .logout-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--primary);
+      font-size: 1.1rem;
+    }
+
+    /* ===== MAIN CONTAINER ===== */
+    .container {
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+
+    .header-section {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
+
+    .header-section h1 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--primary-dark);
+    }
+
+    .new-post-trigger {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 0.8rem 1.5rem;
+      border-radius: 50px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(224, 90, 122, 0.3);
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .new-post-trigger:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(224, 90, 122, 0.4);
+    }
+
+    /* ===== POST CARD ===== */
+    .post-card {
+      background: var(--glass-bg);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--glass-border);
+      border-radius: 20px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: var(--shadow);
+      transition: transform 0.3s ease;
+    }
+
+    .post-card:hover {
+      transform: scale(1.01);
+    }
+
+    .post-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    .anon-info {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+
+    .avatar {
+      width: 40px;
+      height: 40px;
+      background: var(--primary-light);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary-dark);
+      font-size: 1.2rem;
+    }
+
+    .anon-name {
+      font-weight: 600;
+      font-size: 1rem;
+      color: var(--text-main);
+    }
+
+    .post-time {
+      font-size: 0.8rem;
+      color: var(--text-sub);
+    }
+
+    .post-content {
+      font-size: 1.05rem;
+      line-height: 1.6;
+      margin-bottom: 1.2rem;
+      color: #444;
+    }
+
+    .post-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 1rem;
+      border-top: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .post-actions {
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    .action-btn {
+      background: none;
+      border: none;
+      color: var(--text-sub);
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: color 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .action-btn:hover {
+      color: var(--primary);
+    }
+
+    .reactions-list {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-top: 1rem;
+    }
+
+    .reaction-badge {
+      background: rgba(224, 90, 122, 0.1);
+      color: var(--primary-dark);
+      padding: 0.3rem 0.6rem;
+      border-radius: 12px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: all 0.2s;
+    }
+
+    .reaction-badge:hover {
+      background: rgba(224, 90, 122, 0.2);
+      border-color: var(--primary-light);
+    }
+
+    .reaction-badge.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    /* ===== REACTION POPUP ===== */
+    .reaction-popup {
+      position: absolute;
+      background: white;
+      padding: 0.5rem;
+      border-radius: 30px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      display: none;
+      gap: 0.5rem;
+      z-index: 100;
+      border: 1px solid #eee;
+    }
+
+    .reaction-popup.active {
+      display: flex;
+      animation: fadeIn 0.2s ease-out;
+    }
+
+    .emoji-opt {
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: transform 0.2s;
+      padding: 0.2rem;
+    }
+
+    .emoji-opt:hover {
+      transform: scale(1.3);
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* ===== REPLIES ===== */
+    .replies-container {
+      margin-top: 1rem;
+      padding-left: 1rem;
+      border-left: 2px solid var(--primary-light);
+      display: none;
+    }
+
+    .replies-container.active {
+      display: block;
+    }
+
+    .reply-item {
+      margin-top: 0.8rem;
+      font-size: 0.9rem;
+    }
+
+    .reply-author {
+      font-weight: 600;
+      color: var(--primary-dark);
+    }
+
+    .reply-input-wrapper {
+      margin-top: 1rem;
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .reply-input {
+      flex: 1;
+      background: rgba(0, 0, 0, 0.03);
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 0.5rem 0.8rem;
+      font-size: 0.9rem;
+      outline: none;
+    }
+
+    .reply-input:focus {
+      border-color: var(--primary);
+    }
+
+    .reply-submit {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 0.4rem 1rem;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    /* ===== MODAL ===== */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(4px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+    }
+
+    .modal-content {
+      background: white;
+      width: 90%;
+      max-width: 500px;
+      border-radius: 20px;
+      padding: 2rem;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+      animation: modalIn 0.3s ease-out;
+    }
+
+    @keyframes modalIn {
+      from {
+        opacity: 0;
+        transform: scale(0.9);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    .modal-content h2 {
+      margin-bottom: 1.5rem;
+      color: var(--primary-dark);
+      font-size: 1.5rem;
+    }
+
+    .modal-content textarea {
+      width: 100%;
+      height: 150px;
+      border: 1px solid #eee;
+      background: #f9f9f9;
+      border-radius: 15px;
+      padding: 1rem;
+      font-size: 1rem;
+      outline: none;
+      resize: none;
+      margin-bottom: 1.5rem;
+    }
+
+    .modal-content textarea:focus {
+      border-color: var(--primary);
+    }
+
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 1rem;
+    }
+
+    .btn-cancel {
+      background: #eee;
+      color: #666;
+      border: none;
+      padding: 0.8rem 1.5rem;
+      border-radius: 12px;
+      cursor: pointer;
+    }
+
+    .btn-submit {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 0.8rem 1.5rem;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    /* ===== LOADING & EMPTY ===== */
+    .loading-state {
+      text-align: center;
+      padding: 3rem;
+      color: var(--text-sub);
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 4rem;
+      background: var(--glass-bg);
+      border-radius: 20px;
+    }
+
+    .empty-state i {
+      font-size: 3rem;
+      color: var(--primary-light);
+      margin-bottom: 1rem;
+    }
+
+    @media (max-width: 600px) {
+      .navbar {
+        padding: 0.8rem 1rem;
+      }
+
+      .logo a img {
+        height: 40px;
+      }
+
+      .header-section h1 {
+        font-size: 1.4rem;
+      }
+
+      .new-post-trigger span {
+        display: none;
+      }
+
+      .new-post-trigger {
+        padding: 0.8rem;
+        border-radius: 50%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <div class="logo">
+      <a href="{% url 'landing' %}">
+        <img src="{% static 'images/Safespace logo.png' %}" alt="SafeSpace Logo">
+      </a>
+    </div>
+    <div class="nav-icons">
+      <a href="{% url 'dashboard' %}" title="Dashboard"><i class="fa-solid fa-house"></i></a>
+      <a href="{% url 'insights' %}" title="Insights"><i class="fa-solid fa-chart-line"></i></a>
+      <a href="{% url 'notifications' %}" title="Notifications"><i class="fa-solid fa-bell"></i></a>
+      <form action="{% url 'logout' %}" method="post" style="display: inline;">
+        {% csrf_token %}
+        <button type="submit" class="logout-btn" title="Logout">
+          <i class="fa-solid fa-right-from-bracket"></i>
+        </button>
+      </form>
+    </div>
+  </nav>
+
+  <!-- MAIN CONTENT -->
+  <main class="container">
+    <div class="header-section">
+      <h1>SafeSpace Hub</h1>
+      <button class="new-post-trigger" id="openModal">
+        <i class="fa-solid fa-plus"></i>
+        <span>Share a thought</span>
+      </button>
+    </div>
+
+    <div id="postsList">
+      <!-- Posts will be injected here -->
+      <div class="loading-state">
+        <i class="fas fa-spinner fa-spin"></i>
+        <p>Loading your space...</p>
+      </div>
+    </div>
+  </main>
+
+  <!-- NEW POST MODAL -->
+  <div class="modal-overlay" id="postModal">
+    <div class="modal-content">
+      <h2>New Anonymous Post</h2>
+      <textarea id="postContent" placeholder="What's on your mind? Share safely and anonymously..."></textarea>
+      <div class="modal-actions">
+        <button class="btn-cancel" id="closeModal">Cancel</button>
+        <button class="btn-submit" id="submitPost">Post Secretly</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Use standard CSRF handling for Django
+    function getCookie(name) {
+      let cookieValue = null;
+      if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+          const cookie = cookies[i].trim();
+          if (cookie.substring(0, name.length + 1) === (name + '=')) {
+            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+            break;
+          }
+        }
+      }
+      return cookieValue;
+    }
+    const csrftoken = getCookie('csrftoken');
+
+    const postsList = document.getElementById('postsList');
+    const postModal = document.getElementById('postModal');
+    const openModalBtn = document.getElementById('openModal');
+    const closeModalBtn = document.getElementById('closeModal');
+    const submitPostBtn = document.getElementById('submitPost');
+    const postContentInput = document.getElementById('postContent');
+
+    // Modal Logic
+    openModalBtn.onclick = () => postModal.style.display = 'flex';
+    closeModalBtn.onclick = () => postModal.style.display = 'none';
+    window.onclick = (e) => { if (e.target == postModal) postModal.style.display = 'none'; };
+
+    // Fetch Posts
+    async function fetchPosts() {
+      try {
+        const res = await fetch('/api/posts/');
+        const posts = await res.json();
+        renderPosts(posts);
+      } catch (err) {
+        console.error("Failed to fetch posts:", err);
+        postsList.innerHTML = '<div class="empty-state"><i class="fas fa-exclamation-circle"></i><p>Failed to load posts. Please try again.</p></div>';
+      }
+    }
+
+    function renderPosts(posts) {
+      if (posts.length === 0) {
+        postsList.innerHTML = '<div class="empty-state"><i class="fas fa-feather-alt"></i><p>No secrets shared yet. Be the first!</p></div>';
+        return;
+      }
+
+      postsList.innerHTML = posts.map(post => `
+                <div class="post-card" data-id="${post.id}">
+                    <div class="post-header">
+                        <div class="anon-info">
+                            <div class="avatar">${post.anon_name.charAt(post.anon_name.indexOf(' ') + 1) || 'A'}</div>
+                            <div>
+                                <div class="anon-name">${post.anon_name}</div>
+                                <div class="post-time">${formatTime(post.created_at)}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="post-content">${escapeHTML(post.content)}</div>
+                    
+                    <div class="post-footer">
+                        <div class="post-actions">
+                            <button class="action-btn react-trigger"><i class="fa-regular fa-heart"></i> React</button>
+                            <button class="action-btn reply-trigger"><i class="fa-regular fa-comment"></i> ${post.replies.length} Replies</button>
+                        </div>
+                        <div class="reaction-popup" id="popup-${post.id}">
+                            <span class="emoji-opt">❤️</span>
+                            <span class="emoji-opt">😢</span>
+                            <span class="emoji-opt">🔥</span>
+                            <span class="emoji-opt">👏</span>
+                            <span class="emoji-opt">🤍</span>
+                        </div>
+                    </div>
+
+                    <div class="reactions-list">
+                        ${Object.entries(post.reactions).map(([emoji, count]) => `
+                            <div class="reaction-badge ${post.user_reactions.includes(emoji) ? 'active' : ''}" data-emoji="${emoji}">
+                                ${emoji} ${count}
+                            </div>
+                        `).join('')}
+                    </div>
+
+                    <div class="replies-container" id="replies-${post.id}">
+                        ${post.replies.map(reply => `
+                            <div class="reply-item">
+                                <span class="reply-author">${reply.anon_name}:</span>
+                                <span>${escapeHTML(reply.content)}</span>
+                            </div>
+                        `).join('')}
+                        <div class="reply-input-wrapper">
+                            <input type="text" class="reply-input" placeholder="Type a supportive reply..." id="input-${post.id}">
+                            <button class="reply-submit">Send</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+      attachEventListeners();
+    }
+
+    function attachEventListeners() {
+      // Reaction Popup
+      document.querySelectorAll('.react-trigger').forEach(btn => {
+        btn.onclick = (e) => {
+          const postId = btn.closest('.post-card').dataset.id;
+          const popup = document.getElementById(`popup-${postId}`);
+          // Close other popups
+          document.querySelectorAll('.reaction-popup.active').forEach(p => {
+            if (p !== popup) p.classList.remove('active');
+          });
+          popup.classList.toggle('active');
+        };
+      });
+
+      // Emoji Selection
+      document.querySelectorAll('.emoji-opt').forEach(opt => {
+        opt.onclick = async () => {
+          const postId = opt.closest('.post-card').dataset.id;
+          const emoji = opt.textContent;
+          const popup = document.getElementById(`popup-${postId}`);
+          popup.classList.remove('active');
+          await addReaction(postId, emoji);
+        };
+      });
+
+      // Reaction Click from badges (toggle)
+      document.querySelectorAll('.reaction-badge').forEach(badge => {
+        badge.onclick = async () => {
+          const postId = badge.closest('.post-card').dataset.id;
+          const emoji = badge.dataset.emoji;
+          await addReaction(postId, emoji);
+        };
+      });
+
+      // Toggle Replies
+      document.querySelectorAll('.reply-trigger').forEach(btn => {
+        btn.onclick = () => {
+          const postId = btn.closest('.post-card').dataset.id;
+          const container = document.getElementById(`replies-${postId}`);
+          const input = document.getElementById(`input-${postId}`);
+          container.classList.toggle('active');
+          if (container.classList.contains('active')) {
+            input.focus();
+          }
+        };
+      });
+
+      // Submit Reply
+      document.querySelectorAll('.reply-submit').forEach(btn => {
+        btn.onclick = async () => {
+          const postId = btn.closest('.post-card').dataset.id;
+          const input = btn.previousElementSibling;
+          const content = input.value.trim();
+          if (content) {
+            await addReply(postId, content);
+            input.value = '';
+          }
+        };
+      });
+    }
+
+    // API Interactions
+    async function createPost() {
+      const content = postContentInput.value.trim();
+      if (!content) return;
+
+      submitPostBtn.disabled = true;
+      submitPostBtn.innerText = 'Posting...';
+
+      try {
+        const res = await fetch('/api/posts/create/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrftoken
+          },
+          body: JSON.stringify({ content })
+        });
+        if (res.ok) {
+          postModal.style.display = 'none';
+          postContentInput.value = '';
+          fetchPosts();
+        }
+      } catch (err) {
+        console.error("Error creating post:", err);
+      } finally {
+        submitPostBtn.disabled = false;
+        submitPostBtn.innerText = 'Post Secretly';
+      }
+    }
+
+    async function addReply(postId, content) {
+      try {
+        const res = await fetch(`/api/posts/${postId}/reply/`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrftoken
+          },
+          body: JSON.stringify({ content })
+        });
+        if (res.ok) fetchPosts();
+      } catch (err) {
+        console.error("Error adding reply:", err);
+      }
+    }
+
+    async function addReaction(postId, emoji) {
+      try {
+        const res = await fetch(`/api/posts/${postId}/react/`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrftoken
+          },
+          body: JSON.stringify({ emoji })
+        });
+        if (res.ok) fetchPosts();
+      } catch (err) {
+        console.error("Error adding reaction:", err);
+      }
+    }
+
+    // Helpers
+    function formatTime(dateStr) {
+      const date = new Date(dateStr);
+      const now = new Date();
+      const diff = (now - date) / 1000;
+
+      if (diff < 60) return 'Just now';
+      if (diff < 3600) return Math.floor(diff / 60) + 'm ago';
+      if (diff < 86400) return Math.floor(diff / 3600) + 'h ago';
+      return date.toLocaleDateString();
+    }
+
+    function escapeHTML(str) {
+      const p = document.createElement('p');
+      p.textContent = str;
+      return p.innerHTML;
+    }
+
+    submitPostBtn.onclick = createPost;
+
+    // Initialize
+    fetchPosts();
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Choose What You Like</title>
+    <link rel="stylesheet" href="option.css">
+</head>
+<body>
+
+<div class="container">
+    <h1>Choose what you like</h1>
+    <p class="subtitle">your feed will be personalized based on what you like.</p>
+
+    <div class="tags">
+    <div class="tag">Anxiety <span>+</span></div>
+    <div class="tag">Depression <span>+</span></div>
+    <div class="tag">PCOS <span>+</span></div>
+
+    <div class="tag">Fitness <span>+</span></div>
+    <div class="tag">Career Guidance <span>+</span></div>
+    <div class="tag">Medication <span>+</span></div>
+
+    <div class="tag">Stress <span>+</span></div>
+    <div class="tag">Motivation <span>+</span></div>
+    <div class="tag">Anger Issue <span>+</span></div>
+
+    <div class="tag">Procrastination <span>+</span></div>
+    <div class="tag">Time management <span>+</span></div>
+    <div class="tag">Career Confusion <span>+</span></div>
+
+    <div class="tag">Skill building Guidance <span>+</span></div>
+    <div class="tag">Personal development <span>+</span></div>
+    <div class="tag">Tip and tricks <span>+</span></div>
+
+    <div class="tag">Fear of Failure <span>+</span></div>
+    <div class="tag">Mood Swing <span>+</span></div>
+    <div class="tag">Trauma Healing Support <span>+</span></div>
+
+    <div class="tag">Mindfulness and Calmness <span>+</span></div>
+    <div class="tag">Goal Setting <span>+</span></div>
+    <div class="tag">Assigmnement and Project Help <span>+</span></div>
+
+    <div class="tag">Productivity Building <span>+</span></div>
+    <div class="tag">Exam Preparation Support <span>+</span></div>
+    <div class="tag">Skill Development <span>+</span></div>
+
+</div>
+
+
+
+    <div class="next-btn">
+        <button class="next">
+           <a href="discussion.html"> <span class="icon">⏭</span> Next</a>
+        </button>
+    </div>
+</div>
+    <script>
+    const tags = document.querySelectorAll(".tag");
+
+    tags.forEach(tag => {
+        tag.addEventListener("click", () => {
+            tag.classList.toggle("selected");
+        });
+    });
+</script>
+
+</body>
+</html>

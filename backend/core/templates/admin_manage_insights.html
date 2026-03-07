@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SafeSpace Admin – Manage Insights</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #e05a7a;
+            --bg-color: #ffeef2;
+            --glass-bg: rgba(255, 255, 255, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.4);
+            --text-main: #333;
+            --text-sub: #666;
+            --shadow: 0 8px 32px 0 rgba(224, 90, 122, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--bg-color) 0%, #fff0f5 100%);
+            min-height: 100vh;
+            color: var(--text-main);
+        }
+
+        .navbar {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--glass-border);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo img {
+            height: 40px;
+        }
+
+        .nav-links a {
+            color: var(--text-sub);
+            text-decoration: none;
+            font-weight: 600;
+            margin-left: 1rem;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .header {
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .admin-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+        }
+
+        .admin-card h2 {
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+        }
+
+        form {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        label {
+            font-weight: 600;
+            color: var(--text-sub);
+        }
+
+        input,
+        select,
+        textarea {
+            padding: 0.8rem;
+            border: 1px solid var(--glass-border);
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.5);
+            font-size: 1rem;
+        }
+
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+            font-weight: 700;
+            transition: 0.3s;
+        }
+
+        .btn-add {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-delete {
+            background: #ff4757;
+            color: white;
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        th,
+        td {
+            text-align: left;
+            padding: 1rem;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        th {
+            color: var(--text-sub);
+            font-weight: 600;
+        }
+
+        .insight-img {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="logo"><a href="{% url 'admin_dashboard' %}"><img src="{% static 'images/Safespace logo.png' %}"></a>
+        </div>
+        <div class="nav-links"><a href="{% url 'admin_dashboard' %}">Dashboard</a></div>
+    </nav>
+
+    <div class="container">
+        <div class="header">
+            <h1>Manage Insights</h1>
+        </div>
+
+        <div class="admin-card">
+            <h2>Add New Insight</h2>
+            <form method="post">
+                {% csrf_token %}
+                <div class="form-group"><label>Title</label>{{ form.title }}</div>
+                <div class="form-group"><label>Description</label>{{ form.description }}</div>
+                <div class="form-group"><label>Category</label>{{ form.category }}</div>
+                <div class="form-group"><label>Image Path/URL</label>{{ form.image }}</div>
+                <div class="form-group"><label>Link</label>{{ form.link }}</div>
+                <button type="submit" class="btn btn-add">Save Insight</button>
+            </form>
+        </div>
+
+        <div class="admin-card">
+            <h2>Existing Insights</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Image</th>
+                        <th>Title</th>
+                        <th>Category</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for insight in insights %}
+                    <tr>
+                        <td>
+                            {% if insight.image %}
+                            <img src="{{ insight.image }}" class="insight-img">
+                            {% else %}
+                            No img
+                            {% endif %}
+                        </td>
+                        <td>{{ insight.title }}</td>
+                        <td>{{ insight.get_category_display }}</td>
+                        <td>
+                            <a href="{% url 'delete_insight' insight.id %}" class="btn btn-delete"
+                                onclick="return confirm('Are you sure?')">Delete</a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4">No insights found.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+
+</html>

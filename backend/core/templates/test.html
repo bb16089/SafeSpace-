@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Advanced Chatbot</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+<style>
+ 
+  * { box-sizing: border-box; margin:0; padding:0; font-family: 'Roboto', sans-serif; }
+  body { background: #f2f2f7; }
+
+
+  nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #4f46e5;
+    padding: 10px 20px;
+    color: #fff;
+  }
+  nav img.logo { height: 40px; }
+  nav .nav-icons { display: flex; gap: 15px; }
+  nav .nav-icons i { font-size: 20px; cursor: pointer; }
+
+ 
+  .chat-container {
+    max-width: 450px;
+    width: 90%;
+    margin: 30px auto;
+    background: #fff;
+    border-radius: 15px;
+    box-shadow: 0 4px 25px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+
+  .messages {
+    padding: 15px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    overflow-y: auto;
+    max-height: 400px;
+  }
+  .message {
+    padding: 10px 15px;
+    border-radius: 20px;
+    max-width: 80%;
+    word-wrap: break-word;
+  }
+  .bot { background: #4f46e5; color: #fff; align-self: flex-start; }
+  .user { background: #e0e0e0; align-self: flex-end; }
+
+  
+  .start-chat {
+    display: flex;
+    justify-content: center;
+    padding: 15px;
+    border-top: 1px solid #ddd;
+  }
+  .start-chat button {
+    background: #4f46e5;
+    color: #fff;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: 0.3s;
+  }
+  .start-chat button:hover { background: #3730a3; }
+
+ 
+  .subscription {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+  }
+  .subscription button {
+    background: #10b981;
+    color: #fff;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 25px;
+    cursor: pointer;
+    margin-top: 15px;
+    font-size: 16px;
+  }
+  .subscription button:hover { background: #059669; }
+</style>
+
+<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</head>
+<body>
+
+
+<nav>
+  <img src="https://via.placeholder.com/120x40?text=LOGO" class="logo" alt="Logo">
+  <div class="nav-icons">
+    <i class="fas fa-home"></i>
+    <i class="fas fa-info-circle"></i>
+    <i class="fas fa-envelope"></i>
+  </div>
+</nav>
+
+<div class="chat-container">
+  <div class="messages" id="messages">
+    <div class="message bot">Hi there! How can I help you?</div>
+  </div>
+  <div class="start-chat" id="startChatDiv">
+    <button id="startBtn">Let's Start</button>
+  </div>
+</div>
+
+<script>
+  const messages = document.getElementById('messages');
+  const startChatDiv = document.getElementById('startChatDiv');
+  const startBtn = document.getElementById('startBtn');
+
+  startBtn.addEventListener('click', () => {
+  startChatDiv.innerHTML = '';
+
+    const subDiv = document.createElement('div');
+    subDiv.classList.add('subscription');
+    subDiv.innerHTML = `
+      <p>Before we continue, please subscribe to access the chatbot.</p>
+      <button id="subscribeBtn">Subscribe Now</button>
+    `;
+    startChatDiv.appendChild(subDiv);
+
+    messages.scrollTop = messages.scrollHeight;
+
+    
+    document.getElementById('subscribeBtn').addEventListener('click', () => {
+      addBotMessage("Thank you for subscribing! How can I assist you today?");
+    });
+  });
+
+  function addBotMessage(text) {
+    const botMsg = document.createElement('div');
+    botMsg.classList.add('message', 'bot');
+    botMsg.innerText = text;
+    messages.appendChild(botMsg);
+    messages.scrollTop = messages.scrollHeight;
+  }
+</script>
+
+</body>
+</html>
