@@ -59,3 +59,39 @@ class Notification(models.Model):
 
     def __str__(self):
         return self.title
+
+class MentorProfile(models.Model):
+    MENTOR_CHOICES = [
+        ('academic', 'Academic Mentor'),
+        ('emotional', 'Emotional Mentor'),
+    ]
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    mentor_type = models.CharField(max_length=20, choices=MENTOR_CHOICES)
+
+    def __str__(self):
+        return f"{self.user.username} - {self.get_mentor_type_display()}"
+
+class MentorMessage(models.Model):
+    MENTOR_CHOICES = [
+        ('academic', 'Academic Mentor'),
+        ('emotional', 'Emotional Mentor'),
+    ]
+    session_user = models.ForeignKey(User, related_name='mentor_sessions', on_delete=models.CASCADE)
+    sender = models.ForeignKey(User, related_name='sent_mentor_messages', on_delete=models.CASCADE)
+    mentor_type = models.CharField(max_length=20, choices=MENTOR_CHOICES)
+    content = models.TextField()
+    timestamp = models.DateTimeField(auto_now_add=True)
+    is_read = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"Message from {self.sender.username} to {self.mentor_type} session of {self.session_user.username}"
+
+class Report(models.Model):
+    post = models.ForeignKey(Post, related_name='reports', on_delete=models.CASCADE)
+    reporter = models.ForeignKey(User, on_delete=models.CASCADE)
+    reason = models.TextField()
+    is_resolved = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Report by {self.reporter.username} on Post {self.post.id}"

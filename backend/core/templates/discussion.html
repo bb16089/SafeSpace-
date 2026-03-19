@@ -496,6 +496,33 @@
       <a href="{% url 'dashboard' %}" title="Dashboard"><i class="fa-solid fa-house"></i></a>
       <a href="{% url 'insights' %}" title="Insights"><i class="fa-solid fa-chart-line"></i></a>
       <a href="{% url 'notifications' %}" title="Notifications"><i class="fa-solid fa-bell"></i></a>
+      
+      <div class="msg-dropdown" style="position: relative; margin-top:2px;">
+        <a href="#" style="background:none; border:none; cursor:pointer;" onclick="toggleMsgDropdown(event)" title="Messages">
+          <i class="fa-solid fa-envelope"></i>
+        </a>
+        <div id="msgDropdownContent" style="display: none; position: absolute; right: 0; top: 45px; background: white; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 220px; z-index: 1000; overflow: hidden; flex-direction: column;">
+          <a href="{% url 'user_mentor_chat' 'academic' %}" style="padding: 1rem; color: #333; text-decoration: none; border-bottom: 1px solid #eee; display: flex; align-items: center; gap: 10px; width: 100%; border-radius: 0; justify-content: flex-start; background: transparent;">
+            <i class="fa-solid fa-book-open" style="color: #e05a7a; font-size: 1rem;"></i> <span style="font-size: 0.95rem;">Academic Mentor</span>
+          </a>
+          <a href="{% url 'user_mentor_chat' 'emotional' %}" style="padding: 1rem; color: #333; text-decoration: none; display: flex; align-items: center; gap: 10px; width: 100%; border-radius: 0; justify-content: flex-start; background: transparent;">
+            <i class="fa-solid fa-heart" style="color: #e05a7a; font-size: 1rem;"></i> <span style="font-size: 0.95rem;">Emotional Mentor</span>
+          </a>
+        </div>
+      </div>
+      <script>
+        function toggleMsgDropdown(e) {
+          e.preventDefault();
+          const content = document.getElementById('msgDropdownContent');
+          content.style.display = content.style.display === 'flex' ? 'none' : 'flex';
+        }
+        document.addEventListener('click', function(e) {
+          if (!e.target.closest('.msg-dropdown')) {
+            const content = document.getElementById('msgDropdownContent');
+            if (content) content.style.display = 'none';
+          }
+        });
+      </script>
       <form action="{% url 'logout' %}" method="post" style="display: inline;">
         {% csrf_token %}
         <button type="submit" class="logout-btn" title="Logout">

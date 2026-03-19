@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SafeSpace Admin – Manage Reports</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #e05a7a;
+            --bg-color: #ffeef2;
+            --glass-bg: rgba(255, 255, 255, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.4);
+            --text-main: #333;
+            --text-sub: #666;
+            --shadow: 0 8px 32px 0 rgba(224, 90, 122, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--bg-color) 0%, #fff0f5 100%);
+            min-height: 100vh;
+            color: var(--text-main);
+        }
+
+        .navbar {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--glass-border);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo img {
+            height: 40px;
+        }
+
+        .nav-links a {
+            color: var(--text-sub);
+            text-decoration: none;
+            font-weight: 600;
+            margin-left: 1rem;
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .header {
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .admin-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+        }
+
+        .admin-card h2 {
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        th,
+        td {
+            text-align: left;
+            padding: 1.2rem 1rem;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        th {
+            color: var(--text-sub);
+            font-weight: 600;
+            background: rgba(255,255,255,0.4);
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 0.9rem;
+            margin-right: 0.5rem;
+        }
+
+        .btn-resolve {
+            background: #2ed573;
+            color: white;
+        }
+
+        .btn-resolve:hover {
+            background: #27ae60;
+        }
+
+        .btn-delete {
+            background: #ff4757;
+            color: white;
+        }
+        
+        .btn-delete:hover {
+            background: #ff6b81;
+        }
+
+        .status-badge {
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .status-unresolved {
+            background: #ffeaa7;
+            color: #d35400;
+        }
+
+        .status-resolved {
+            background: #c8d6e5;
+            color: #576574;
+        }
+
+        .post-preview {
+            max-width: 300px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            color: var(--text-sub);
+            font-size: 0.9rem;
+            background: rgba(255,255,255,0.5);
+            padding: 0.5rem;
+            border-radius: 8px;
+            border: 1px solid #eee;
+        }
+
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="logo"><a href="{% url 'admin_dashboard' %}"><img src="{% static 'images/Safespace logo.png' %}"></a></div>
+        <div class="nav-links">
+            <a href="{% url 'admin_dashboard' %}">Dashboard</a>
+            <a href="{% url 'manage_posts' %}">Posts</a>
+            <a href="{% url 'manage_reports' %}" style="color: var(--primary);">Reports</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="header">
+            <h1>Manage User Reports</h1>
+        </div>
+
+        <div class="admin-card">
+            <h2>Reported Forum Posts</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Reporter</th>
+                        <th>Reported Post</th>
+                        <th>Reason</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for report in reports %}
+                    <tr>
+                        <td>{{ report.created_at|date:"M d, Y H:i" }}</td>
+                        <td><strong>{{ report.reporter.username }}</strong></td>
+                        <td>
+                            <div class="post-preview" title="{{ report.post.content }}">
+                                {% if report.post %}
+                                    {{ report.post.content }}
+                                {% else %}
+                                    <em style="color:#d63031;">[Post Deleted]</em>
+                                {% endif %}
+                            </div>
+                        </td>
+                        <td>{{ report.reason }}</td>
+                        <td>
+                            {% if report.is_resolved %}
+                                <span class="status-badge status-resolved"><i class="fa-solid fa-check"></i> Resolved</span>
+                            {% else %}
+                                <span class="status-badge status-unresolved"><i class="fa-solid fa-exclamation-circle"></i> Pending</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if not report.is_resolved %}
+                                <a href="{% url 'resolve_report' report.id %}" class="btn btn-resolve" title="Mark as resolved"><i class="fa-solid fa-check"></i></a>
+                            {% endif %}
+                            {% if report.post %}
+                                <a href="{% url 'delete_post' report.post.id %}" class="btn btn-delete" title="Delete the offending post" onclick="return confirm('Delete this reported post? This action cannot be undone.')"><i class="fa-solid fa-trash-can"></i> Post</a>
+                            {% endif %}
+                            <a href="{% url 'delete_report' report.id %}" class="btn btn-delete" style="background:#747d8c;" title="Delete this report" onclick="return confirm('Delete report log?')"><i class="fa-solid fa-eraser"></i></a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" style="text-align:center; padding: 2rem;">
+                            <i class="fa-solid fa-shield-check" style="font-size:3rem; color:#badc58; margin-bottom:1rem;"></i>
+                            <p>No active reports found. The community is safe!</p>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

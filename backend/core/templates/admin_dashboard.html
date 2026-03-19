@@ -172,7 +172,6 @@
             </a>
         </div>
         <div class="nav-links">
-            <a href="{% url 'dashboard' %}">User Hub</a>
             <form action="{% url 'logout' %}" method="post" style="display: inline;">
                 {% csrf_token %}
                 <button type="submit"
@@ -189,11 +188,6 @@
 
         <div class="stats-grid">
             <div class="stat-card">
-                <i class="fa-solid fa-chart-line"></i>
-                <h3>Total Insights</h3>
-                <div class="value">{{ insights_count }}</div>
-            </div>
-            <div class="stat-card">
                 <i class="fa-solid fa-bell"></i>
                 <h3>Total Notifications</h3>
                 <div class="value">{{ notifications_count }}</div>
@@ -206,9 +200,6 @@
         </div>
 
         <div class="actions">
-            <a href="{% url 'manage_insights' %}" class="btn btn-primary">
-                <i class="fa-solid fa-pen-to-square"></i> Manage Insights
-            </a>
             <a href="{% url 'manage_notifications' %}" class="btn btn-secondary">
                 <i class="fa-solid fa-bullhorn"></i> Manage Notifications
             </a>

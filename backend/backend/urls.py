@@ -38,19 +38,30 @@ urlpatterns = [
         LogoutView.as_view(template_name='logout.html'),
         name='logout'
     ),
+    path('mentor-login/', views.mentor_login_view, name='mentor_login'),
     path('api/posts/', views.get_posts, name='get_posts'),
     path('api/posts/create/', views.create_post, name='create_post'),
     path('api/posts/<int:post_id>/reply/', views.add_reply, name='add_reply'),
     path('api/posts/<int:post_id>/react/', views.add_reaction, name='add_reaction'),
+    path('api/posts/<int:post_id>/report/', views.report_post, name='report_post'),
     path('insights/', views.insights_view, name='insights'),
     path('notifications/', views.notifications_view, name='notifications'),
 
     # Custom Admin Panel
     path('admin-panel/', views.admin_dashboard, name='admin_dashboard'),
-    path('admin-panel/insights/', views.manage_insights, name='manage_insights'),
-    path('admin-panel/insights/delete/<int:insight_id>/', views.delete_insight, name='delete_insight'),
     path('admin-panel/notifications/', views.manage_notifications, name='manage_notifications'),
     path('admin-panel/notifications/delete/<int:notif_id>/', views.delete_notification, name='delete_notification'),
     path('admin-panel/posts/', views.manage_posts, name='manage_posts'),
     path('admin-panel/posts/delete/<int:post_id>/', views.delete_post, name='delete_post'),
+    path('admin-panel/reports/', views.manage_reports, name='manage_reports'),
+    path('admin-panel/reports/delete/<int:report_id>/', views.delete_report, name='delete_report'),
+    path('admin-panel/reports/resolve/<int:report_id>/', views.resolve_report, name='resolve_report'),
+
+    # Mentor Chat
+    path('chat/<str:mentor_type>/', views.user_mentor_chat, name='user_mentor_chat'),
+    path('mentor-panel/', views.mentor_panel, name='mentor_panel'),
+    path('mentor-panel/chat/<int:session_user_id>/<str:mentor_type>/', views.mentor_panel_chat, name='mentor_panel_chat'),
+    path('api/chat/<int:session_user_id>/<str:mentor_type>/', views.chat_api, name='chat_api'),
+    path('api/chat/notifications/', views.chat_notifications_api, name='chat_notifications_api'),
+    path('api/chat/read/<int:session_user_id>/<str:mentor_type>/', views.mark_messages_read_api, name='mark_messages_read_api'),
 ]

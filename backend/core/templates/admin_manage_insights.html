@@ -172,19 +172,6 @@
         </div>
 
         <div class="admin-card">
-            <h2>Add New Insight</h2>
-            <form method="post">
-                {% csrf_token %}
-                <div class="form-group"><label>Title</label>{{ form.title }}</div>
-                <div class="form-group"><label>Description</label>{{ form.description }}</div>
-                <div class="form-group"><label>Category</label>{{ form.category }}</div>
-                <div class="form-group"><label>Image Path/URL</label>{{ form.image }}</div>
-                <div class="form-group"><label>Link</label>{{ form.link }}</div>
-                <button type="submit" class="btn btn-add">Save Insight</button>
-            </form>
-        </div>
-
-        <div class="admin-card">
             <h2>Existing Insights</h2>
             <table>
                 <thead>

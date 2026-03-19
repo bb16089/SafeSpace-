@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Mentor Panel - SafeSpace</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #e05a7a;
+      --primary-light: #f3b6c8;
+      --primary-dark: #b83d5a;
+      --bg-color: #ffeef2;
+      --glass-bg: rgba(255, 255, 255, 0.7);
+      --glass-border: rgba(255, 255, 255, 0.4);
+      --text-main: #333;
+      --text-sub: #666;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+    body {
+      background: linear-gradient(135deg, var(--bg-color) 0%, #fff0f5 100%);
+      color: var(--text-main);
+      min-height: 100vh;
+    }
+    .navbar {
+      background: var(--glass-bg);
+      backdrop-filter: blur(10px);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--glass-border);
+    }
+    .container {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 1.5rem;
+    }
+    h1 { color: var(--primary-dark); margin-bottom: 2rem; }
+    
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.5fr;
+      gap: 2rem;
+      align-items: start;
+    }
+    @media (max-width: 768px) {
+      .dashboard-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    .section-title {
+      font-size: 1.5rem;
+      color: var(--primary-dark);
+      margin-bottom: 1.5rem;
+      border-bottom: 2px solid var(--primary-light);
+      padding-bottom: 0.5rem;
+    }
+
+    .session-card {
+      background: white;
+      border-radius: 15px;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: transform 0.2s;
+    }
+    .session-card:hover { transform: translateY(-3px); }
+    .session-info h3 { color: var(--primary); margin-bottom: 0.5rem; }
+    .session-info p { color: var(--text-sub); font-size: 0.9rem; }
+    
+    .btn-chat {
+      background: var(--primary);
+      color: white;
+      text-decoration: none;
+      padding: 0.8rem 1.5rem;
+      border-radius: 20px;
+      font-weight: 600;
+      transition: background 0.3s;
+    }
+    .btn-chat:hover { background: var(--primary-dark); }
+    
+    .badge {
+      background: #ff4d4d;
+      color: white;
+      padding: 0.2rem 0.6rem;
+      border-radius: 10px;
+      font-size: 0.8rem;
+      margin-left: 10px;
+    }
+
+    /* Insight Form Styles */
+    .form-card {
+      background: white;
+      border-radius: 15px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    }
+    .form-card h3 { color: var(--primary); margin-bottom: 1rem; }
+    .insight-form { display: grid; gap: 1rem; }
+    .form-group { display: flex; flex-direction: column; gap: 0.5rem; }
+    .form-group label { font-weight: 500; font-size: 0.9rem; color: var(--text-sub); }
+    .form-group input, .form-group select, .form-group textarea {
+      padding: 0.8rem; border: 1px solid #ddd; border-radius: 8px; font-family: inherit; font-size: 0.9rem; width: 100%; box-sizing: border-box;
+    }
+    .btn-submit { background: var(--primary); color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 20px; font-weight: 600; cursor: pointer; transition: 0.3s; margin-top: 0.5rem; }
+    .btn-submit:hover { background: var(--primary-dark); }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <h2>SafeSpace Mentor Panel</h2>
+    <form action="{% url 'logout' %}" method="post">
+      {% csrf_token %}
+      <button style="background:none; border:none; color:var(--primary); cursor:pointer; font-weight:bold;"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
+    </form>
+  </nav>
+
+  <div class="container">
+    <h1>Welcome, {{ user.username }}!</h1>
+    
+    <div class="dashboard-grid">
+      <!-- Insights Column -->
+      <div class="insights-section">
+        <h2 class="section-title">Publish Insights</h2>
+        <div class="form-card">
+          <h3><i class="fa-solid fa-plus-circle"></i> Upload a New Insight</h3>
+          <form method="post" class="insight-form">
+            {% csrf_token %}
+            <div class="form-group"><label>Title</label>{{ form.title }}</div>
+            <div class="form-group"><label>Description</label>{{ form.description }}</div>
+            <div class="form-group"><label>Image Path/URL</label>{{ form.image }}</div>
+            <div class="form-group"><label>Link</label>{{ form.link }}</div>
+            <button type="submit" class="btn-submit">Publish {{ mentor_type|title }} Insight</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Messages Column -->
+      <div class="messages-section">
+        <h2 class="section-title">Active {{ mentor_type|title }} Chats</h2>
+        
+        {% if not sessions %}
+          <div style="text-align:center; padding: 3rem; background:white; border-radius:15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+            <i class="fa-solid fa-mug-hot" style="font-size: 3rem; color: #ccc; margin-bottom: 1rem;"></i>
+            <p>No active chats right now. You're all caught up!</p>
+          </div>
+        {% endif %}
+
+        {% for session in sessions %}
+        <div class="session-card">
+          <div class="session-info">
+            <h3><i class="fa-solid fa-user-secret"></i> Anonymous User #{{ session.user.id }}
+              {% if session.unread_count > 0 %}
+              <span class="badge">{{ session.unread_count }} new</span>
+              {% endif %}
+            </h3>
+            {% if session.last_message %}
+            <p style="margin: 0.5rem 0; color: #444;">
+              <strong>Reply to:</strong> "{{ session.last_message.content|truncatechars:50 }}"
+            </p>
+            {% endif %}
+            <p>Last Activity: {{ session.last_message.timestamp|date:"M d, Y h:i A" }}</p>
+          </div>
+          <a href="{% url 'mentor_panel_chat' session.user.id mentor_type %}" class="btn-chat">Reply</a>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let lastUnreadCount = null;
+    async function checkNotifications() {
+      try {
+        const res = await fetch('/api/chat/notifications/');
+        const data = await res.json();
+        
+        if (lastUnreadCount === null) {
+            lastUnreadCount = data.unread_count;
+        }
+
+        if (data.unread_count > lastUnreadCount) {
+          // Play a sound or show browser notification
+          if (Notification.permission === "granted") {
+            new Notification("New incoming message on SafeSpace");
+          }
+          // Reload page to show new latest activity
+          setTimeout(() => location.reload(), 2000);
+        }
+        lastUnreadCount = data.unread_count;
+      } catch (e) {
+        console.error(e);
+      }
+    }
+    
+    // Request notification permission
+    if (Notification.permission !== "denied" && Notification.permission !== "granted") {
+      Notification.requestPermission();
+    }
+
+    setInterval(checkNotifications, 5000);
+  </script>
+</body>
+</html>

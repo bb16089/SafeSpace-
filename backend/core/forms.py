@@ -16,6 +16,11 @@ class AdminInsightForm(forms.ModelForm):
         model = Insight
         fields = ['title', 'description', 'category', 'image', 'link']
 
+class MentorInsightForm(forms.ModelForm):
+    class Meta:
+        model = Insight
+        fields = ['title', 'description', 'image', 'link']
+
 class AdminNotificationForm(forms.ModelForm):
     class Meta:
         model = Notification
